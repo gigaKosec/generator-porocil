@@ -28,7 +28,6 @@ BUGS:
 - radio buttoni za izbiro lokacije so kakor da vsi v eni grupi (čeprav je output v data ob izbiri pravilen)
 
 TODO:
-- shranjevanje (local storage?)
 - datumi za dneve
 - različni izpisi (tedenski/mesečni)
 
