@@ -1,7 +1,7 @@
 <template>
   <b-container class="week" fluid>
     <b-form>
-      <b-button >SHRANI</b-button>
+      <b-button @click="saveDays">SHRANI</b-button>
       <b-row class="day" v-for="day in days" v-bind:key="day.id" > 
         <b-col cols="2">
           <b-row>
@@ -42,6 +42,26 @@ export default {
       ],
     };
   },
+  mounted (){
+    if (localStorage.getItem('days')) {
+      try {this.loadDays(this.days)}
+      catch (e) {
+        console.log('ERROR:',e)
+      }
+    }
+  },
+  methods: {
+    loadDays (days){
+      console.log("loading 'days' from local storage");
+      this.days = JSON.parse(localStorage.getItem('days'));
+    },
+    
+    saveDays (days) {
+      console.log("saving 'days' to local storage")
+      const daysJson = JSON.stringify(this.days);
+      localStorage.setItem('days', daysJson)
+    }
+  }
 };
 </script>
 
