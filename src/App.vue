@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>GENERATOR POROČIL</h1>
+    <dnevi-form></dnevi-form>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    
   </div>
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
+import DneviForm from './components/DneviForm.vue'
 import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    DneviForm
   }
 }
 </script>

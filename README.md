@@ -22,3 +22,20 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+BUGS:
+- radio buttoni za izbiro lokacije so kakor da vsi v eni grupi (čeprav je output v data ob izbiri pravilen)
+
+TODO:
+- shranjevanje (local storage?)
+- datumi za dneve
+- različni izpisi (tedenski/mesečni)
+
+- premakni dnevni row v svojo komponento
+- dnevniForm preimenovat v Tedenski?
+- ? data iz dnevniForm premaknit v app.vue?
+
+TODO MINOR
+- default Lokacija settings = od doma (se ne vidi v obrazcu samem, četudi v dati)
+- lokacija raje le DeloOdDoma checked/unchecked?
