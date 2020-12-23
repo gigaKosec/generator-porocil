@@ -38,4 +38,5 @@ TODO:
 
 TODO MINOR
 - default Lokacija settings = od doma (se ne vidi v obrazcu samem, četudi v dati)
+- obvestilo uporabniku, da shranjenje delovalo
 - lokacija raje le DeloOdDoma checked/unchecked?
