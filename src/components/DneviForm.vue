@@ -18,7 +18,7 @@
               ></b-form-datepicker>
           </b-col>
           
-          <b-col cols="6"><b-button variant="primary" @click="saveDays" size="lg">SHRANI</b-button></b-col>
+          <b-col cols="6"><b-button variant="primary" @click="storeDays" size="lg">SHRANI</b-button></b-col>
           <b-col>
             <b-checkbox id="show-output" v-model="showOutput"> prikaži output</b-checkbox>
           </b-col>
@@ -61,35 +61,21 @@
 </template>
 
 <script>
-import {loadDays, storeDays} from '@/services/storage';
+import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
 
 export default {
   data() {
     return {
       firstDayOfWeekDate: new Date(),
-      days: [
-        { id: 0, dayname: "PON", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-        { id: 1, dayname: "TOR", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-        { id: 2, dayname: "SRE", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-        { id: 3, dayname: "ČET", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-        { id: 4, dayname: "PET", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-      ],
+      days,
       showOutput: false,
       
     };
   },
-  computed: {
-    daysToShow: {
-
-    }
-  },
+  
   mounted (){
-    if (localStorage.getItem('days')) {
-      try {this.loadDays(this.days)}
-      catch (e) {
-        console.log('ERROR:',e)
-      }
-    }
+    console.log("days=", days)
+    days = loadDays()
   },
   methods: {
     changeDate( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
@@ -97,15 +83,9 @@ export default {
          this.days[i].date = this.addDays(firstDay, i);
        }
     },
-    loadDays (days){
-      console.log("loading 'days' from local storage");
-      this.days = JSON.parse(localStorage.getItem('days'));
-    },
-    saveDays (days) {
-      console.log("saving 'days' to local storage")
-      const daysJson = JSON.stringify(this.days);
-      localStorage.setItem('days', daysJson)
-    },
+    loadDays,
+    storeDays,
+
     clearLocalStorage () {
       localStorage.clear()
       location.reload()
