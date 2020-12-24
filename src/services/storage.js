@@ -1,4 +1,4 @@
-import storage_dummy from "./storage_dummy";
+/* import storage_dummy from "./storage_dummy";
 if (nastavitev){
   import {loadDays, storeDays} from storage_dummy;
 }
@@ -9,4 +9,4 @@ else {
 export default {
   loadDays,
   storeDays
-}
+} */

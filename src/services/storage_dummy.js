@@ -1,4 +1,4 @@
-let localDays = [
+/* let localDays = [
   { id: 0, dayname: "PON", date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
   { id: 1, dayname: "TOR", date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
   { id: 2, dayname: "SRE", date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
@@ -13,4 +13,4 @@ export default {
   loadDays: function () {
     return localDays;
   }
-}
+} */

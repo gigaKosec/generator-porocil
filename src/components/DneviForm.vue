@@ -14,7 +14,7 @@
               value-as-date
               size="sm"
               style="width: 170px"
-              @input="changeDate"
+              @input="generateDates"
               ></b-form-datepicker>
           </b-col>
           
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import {loadDays, storeDays} from '@/services/storage';
+/* import {loadDays, storeDays} from '@/services/storage'; */
 
 export default {
   data() {
@@ -78,28 +78,22 @@ export default {
       
     };
   },
-  computed: {
-    daysToShow: {
-
-    }
-  },
+  
   mounted (){
-    if (localStorage.getItem('days')) {
-      try {this.loadDays(this.days)}
-      catch (e) {
-        console.log('ERROR:',e)
-      }
-    }
+    this.loadDays()
   },
   methods: {
-    changeDate( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
+    generateDates( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
        for (let i=0;i<5;i++) {
          this.days[i].date = this.addDays(firstDay, i);
        }
     },
-    loadDays (days){
+    loadDays (){
       console.log("loading 'days' from local storage");
-      this.days = JSON.parse(localStorage.getItem('days'));
+      if (localStorage.getItem('days')) {
+        try {this.days = JSON.parse(localStorage.getItem('days'));}
+        catch (e) {console.log('ERROR:',e)}
+      }
     },
     saveDays (days) {
       console.log("saving 'days' to local storage")
