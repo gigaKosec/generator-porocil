@@ -14,6 +14,7 @@
               value-as-date
               size="sm"
               style="width: 170px"
+              @input="changeDate"
               ></b-form-datepicker>
           </b-col>
           
@@ -60,6 +61,8 @@
 </template>
 
 <script>
+import {loadDays, storeDays} from '@/services/storage';
+
 export default {
   data() {
     return {
@@ -75,6 +78,11 @@ export default {
       
     };
   },
+  computed: {
+    daysToShow: {
+
+    }
+  },
   mounted (){
     if (localStorage.getItem('days')) {
       try {this.loadDays(this.days)}
@@ -84,6 +92,11 @@ export default {
     }
   },
   methods: {
+    changeDate( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
+       for (let i=0;i<5;i++) {
+         this.days[i].date = this.addDays(firstDay, i);
+       }
+    },
     loadDays (days){
       console.log("loading 'days' from local storage");
       this.days = JSON.parse(localStorage.getItem('days'));
@@ -98,25 +111,17 @@ export default {
       location.reload()
     },
     dateDisabled(ymd, date) {
-        // Disable weekends (Sunday = `0`, Saturday = `6`) and
-        // disable days that fall on the 13th of the month
+        // Disable weekends (Sunday = `0`, Saturday = `6`)
         const weekday = date.getDay()
-        const day = date.getDate()
         // Return `true` if the date should be disabled
         return weekday === 0 || weekday === 6
-      },
-      addDays(date, days) {
-        let result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-      }
-  },
-  /* computed : {
-    dateForDayOfWeek(){
-      return this.addDays(this.firstDayOfWeekDate,this.day.id).toDateString()
+    },
+    addDays(date, days) {
+      let result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
     }
-    
-  } */
+  },
 };
 </script>
 
