@@ -51,7 +51,6 @@
           <b-col class="daily-work-description"> <b-textarea rows="5" :value="day.opisDela" v-model="day.opisDela"></b-textarea> </b-col>
           <!-- 3. STOLPEC: output -->
           <b-col class="daily-output" cols="4" style="max-height:200px; overflow: hidden" v-if="showOutput">
-            <b-row> OUTPUTS: first day of week = {{firstDayOfWeekDate}}</b-row>
             <b-row>{{day}}</b-row>
           </b-col>
         </b-row>
@@ -114,7 +113,7 @@ export default {
   },
   /* computed : {
     dateForDayOfWeek(){
-      return this.firstDayOfWeekDate.getDate()
+      return this.addDays(this.firstDayOfWeekDate,this.day.id).toDateString()
     }
     
   } */
