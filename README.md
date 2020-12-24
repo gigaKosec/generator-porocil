@@ -30,12 +30,17 @@ BUGS:
 TODO:
 - datumi za dneve
 - različni izpisi (tedenski/mesečni)
+- sprotno shranjevanje
 
 - premakni dnevni row v svojo komponento
 - dnevniForm preimenovat v Tedenski?
 - ? data iz dnevniForm premaknit v app.vue?
 
+
 TODO MINOR
 - default Lokacija settings = od doma (se ne vidi v obrazcu samem, četudi v dati)
 - obvestilo uporabniku, da shranjenje delovalo
 - lokacija raje le DeloOdDoma checked/unchecked?
+- bližnjice na tipkovnici
+  - ctrl-v prilepi iz pravkar izpolnjenega textarea v naslednjega
+  - tabi preskakujejo le med textarea??
