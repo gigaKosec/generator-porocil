@@ -14,7 +14,7 @@
               value-as-date
               size="sm"
               style="width: 170px"
-              @input="changeDate"
+              @input="generateDates"
               ></b-form-datepicker>
           </b-col>
           
@@ -74,11 +74,10 @@ export default {
   },
   
   mounted (){
-    console.log("days=", days)
-    days = loadDays()
+    this.days = loadDays()
   },
   methods: {
-    changeDate( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
+    generateDates( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
        for (let i=0;i<5;i++) {
          this.days[i].date = this.addDays(firstDay, i);
        }
