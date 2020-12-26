@@ -28,4 +28,5 @@ function storeDays () {
     localStorage.setItem('days', daysJson)
 }
 
-export {days, loadDays,storeDays}
+export { days, loadDays, storeDays };
+

@@ -13,7 +13,7 @@
             start-weekday="1" 
             :date-disabled-fn="dateDisabled"
             :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit'}"
-            v-model="firstDayOfWeekDate"
+            v-model="chosenDate"
             value-as-date
             size="sm"
             style="width: 170px"
@@ -64,15 +64,21 @@
 
 <script>
 import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
+import {setDay} from 'date-fns';
 
 export default {
   data() {
     return {
-      firstDayOfWeekDate: new Date(),
+      chosenDate: new Date(),
       days,
       showOutput: false,
       
     };
+  },
+  computed: {
+    firstDayOfWeekDate: function () {
+      return setDay (this.chosenDate,1)
+    }
   },
   
   mounted (){
@@ -81,15 +87,17 @@ export default {
   methods: {
     generateDates( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
        for (let i=0;i<5;i++) {
-         this.days[i].date = this.addDays(firstDay, i);
+         this.days[i].date = (this.addDays(firstDay, i));
        }
     },
     loadDays,
     storeDays,
 
     clearLocalStorage () {
+      if (confirm('Ali res želiš izbrisati vse vnose?')) {
       localStorage.clear()
       location.reload()
+      }
     },
     dateDisabled(ymd, date) {
         // Disable weekends (Sunday = `0`, Saturday = `6`)
