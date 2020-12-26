@@ -12,12 +12,14 @@ function loadDays (){
     try {
       days = JSON.parse(localStorage.getItem('days'));
       console.log("zlovdal 'days' from local storage");
-      return days
+      /* return days */
     }
     catch (e) {
       console.log('ERROR:',e)
     }
   }
+  return days
+  
 }
 
 function storeDays () {

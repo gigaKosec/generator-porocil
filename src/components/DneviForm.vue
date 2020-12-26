@@ -1,28 +1,30 @@
 <template>
   <div id = "weekly-form">
     <b-container class="week" fluid>
-      <b-form>
+      <b-form id="choose-report-type-form">
+        
+      </b-form>
+      <b-form id="daily-inputs-form">
         <!-- BUTTONS ROW -->
         <b-row class = "buttons-row">
-          <b-col> <!-- datum -->
-              <label> Izberi prvi dan v tednu: </label>
-              <b-form-datepicker
-              start-weekday="1" 
-              :date-disabled-fn="dateDisabled"
-              :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit'}"
-              v-model="firstDayOfWeekDate"
-              value-as-date
-              size="sm"
-              style="width: 170px"
-              @input="generateDates"
-              ></b-form-datepicker>
-          </b-col>
+          <!-- datum -->
+            <label> Izberi prvi dan v tednu: </label>
+            <b-form-datepicker
+            start-weekday="1" 
+            :date-disabled-fn="dateDisabled"
+            :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit'}"
+            v-model="firstDayOfWeekDate"
+            value-as-date
+            size="sm"
+            style="width: 170px"
+            @input="generateDates"
+            ></b-form-datepicker>
           
-          <b-col cols="6"><b-button variant="primary" @click="storeDays" size="lg">SHRANI</b-button></b-col>
+          <b-col><b-button variant="primary" @click="storeDays" size="lg">SHRANI</b-button></b-col>
           <b-col>
             <b-checkbox id="show-output" v-model="showOutput"> prikaži output</b-checkbox>
+            <b-button size="sm" variant="danger" @click="clearLocalStorage">ZBRIŠI LOCAL STORAGE</b-button>
           </b-col>
-          <b-col cols="2"><b-button size="sm" variant="danger" @click="clearLocalStorage">ZBRIŠI LOCAL STORAGE</b-button></b-col>
         </b-row>
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
