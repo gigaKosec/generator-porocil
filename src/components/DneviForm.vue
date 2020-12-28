@@ -105,11 +105,27 @@ export default {
     this.days = loadDays()
   },
   methods: {
-    generateDates( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
+    generateDates( firstDay ) {/* generira (le) array datumov delovnih dni v tednu */
+       let datesForInput = [];
        for (let i=0;i<5;i++) {
-         this.days[i].date = (this.addDays(firstDay, i));
+         datesForInput.push(this.addDays(firstDay, i));
+         
+         /* this.days[i].date = (this.addDays(firstDay, i)); */
        }
+       console.log(datesForInput);
     },
+    generateInputsForDates(datesForInput) {
+      dailyInputs = []  /* namesto variable Days - sedaj je prilagodljiva izbranim datumom */
+      for (date of datesForInput) {
+        if (date in localStorage.ge  dailyInputs) {
+          dailyInputs.push(localStorage.setItem (dailyInputs.[date],)
+        }
+        else {
+          dailyInputs.push(new )
+        }
+      }
+
+    }
     loadDays,
     storeDays,
 
