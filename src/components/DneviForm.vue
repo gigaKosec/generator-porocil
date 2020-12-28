@@ -1,15 +1,18 @@
 <template>
-  <div id = "weekly-form">
+  <div id = "daily-inputs">
     <b-container class="week" fluid>
       <b-form id="choose-report-type-form">
-        
-      </b-form>
-      <b-form id="daily-inputs-form">
-        <!-- BUTTONS ROW -->
-        <b-row class = "buttons-row">
-          <!-- datum -->
-            <label> Izberi prvi dan v tednu: </label>
-            <b-form-datepicker
+        <b-row>
+          <!-- <b-input-group prepend="izberi mesec">
+            <b-form-input type="month"></b-form-input> -->
+          <!-- <b-select>
+
+          </b-select> -->
+          
+          
+          <b-input-group prepend="teden" style="width: 20rem" title="Izberi katerikoli dan iz tedna">
+          <b-form-datepicker
+            id = "selected-date"
             start-weekday="1" 
             :date-disabled-fn="dateDisabled"
             :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit'}"
@@ -18,7 +21,19 @@
             size="sm"
             style="width: 170px"
             @input="generateDates"
-            ></b-form-datepicker>
+          ></b-form-datepicker>
+          </b-input-group>
+          <b-button>izberi</b-button>
+        </b-row>
+      </b-form>
+      
+
+
+      <b-form id="daily-inputs-form">
+        <!-- BUTTONS ROW -->
+        <b-row class = "buttons-row">
+          <!-- datum -->
+            
           
           <b-col><b-button variant="primary" @click="storeDays" size="lg">SHRANI</b-button></b-col>
           <b-col>
@@ -78,6 +93,11 @@ export default {
   computed: {
     firstDayOfWeekDate: function () {
       return setDay (this.chosenDate,1)
+    },
+    lastDayOfWeekDate: function() {
+      /* console.log("last date of week =", this.addDays(this.firstDayOfWeekDate,5)) */
+      return this.addDays(this.firstDayOfWeekDate,5)
+
     }
   },
   
@@ -115,7 +135,8 @@ export default {
 </script>
 
 <style scoped>
-  #weekly-form {
-    margin-left: 20px
+  #daily-inputs {
+    margin-left: 20px;
   }
 </style>
+
