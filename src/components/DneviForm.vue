@@ -20,7 +20,7 @@
             value-as-date
             size="sm"
             style="width: 170px"
-            @input="generateDates"
+            @input="generateChosenDays"
           ></b-form-datepicker>
           </b-input-group>
           <b-button>izberi</b-button>
@@ -35,7 +35,7 @@
           <!-- datum -->
             
           
-          <b-col><b-button variant="primary" @click="storeDays" size="lg">SHRANI</b-button></b-col>
+          <b-col><b-button variant="primary" @click="storeReports" size="lg">SHRANI</b-button></b-col>
           <b-col>
             <b-checkbox id="show-output" v-model="showOutput"> prikaži output</b-checkbox>
             <b-button size="sm" variant="danger" @click="clearLocalStorage">ZBRIŠI LOCAL STORAGE</b-button>
@@ -43,16 +43,17 @@
         </b-row>
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
-        <b-row class="day" v-for="day in days" v-bind:key="day.id" > 
+        <p>{{datesChosen}}</p>
+        <b-row class="day" v-for="day in multipleDaysReports" v-bind:key="day" > 
           
           <!-- 1. STOLPEC: ime dneva, lokacija, št ur -->
           <b-col cols="2" style="min-width: 160px">
-            <b-row> <!-- ime dneva v tednu -->
-              <h2 class="day-name">{{day.dayname}}</h2>
+            <!-- <b-row>  --><!-- ime dneva v tednu -->
+              <!-- <h2 class="day-name">{{day.dayname}}</h2>
             </b-row>
-            <b-row> <!-- datum -->
-              <div class=date>{{addDays(firstDayOfWeekDate,day.id).toDateString()}}</div>
-            </b-row>
+            <b-row> --> <!-- datum -->
+              <!-- <div class=date>{{day.date}}</div>
+            </b-row> -->
             <b-row class="daily-location"> <!-- lokacija -->
               <b-form-radio-group v-model="day.lokacijaDela" inline="true">
                   <b-form-radio value="dom">dom</b-form-radio>
@@ -78,15 +79,20 @@
 </template>
 
 <script>
-import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
-import {setDay} from 'date-fns';
+//import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
+import {setDay, eachDayOfInterval} from 'date-fns';
+import {multipleDaysReports, reportsStored, datesChosen, loadAllReports, storeReports, getMultipleDaysReportsForDatesChosen} from '@/services/storageAlter.js'
 
 export default {
   data() {
     return {
       chosenDate: new Date(),
-      days,
+      //days,
+      //multipleDaysReports,
       showOutput: false,
+      datesChosen: [],
+      reportsStored: {},
+      multipleDaysReports,
       
     };
   },
@@ -96,22 +102,42 @@ export default {
     },
     lastDayOfWeekDate: function() {
       /* console.log("last date of week =", this.addDays(this.firstDayOfWeekDate,5)) */
-      return this.addDays(this.firstDayOfWeekDate,5)
-
-    }
+      return this.addDays(this.firstDayOfWeekDate,4)
+    },
+    
+    /* multipleDaysReportsArray: function(){
+      return Object.values(multipleDaysReports())
+    }, */
   },
-  
+
   mounted (){
-    this.days = loadDays()
+    this.loadAllReports();
+    this.generateChosenDays();
+    
+    //console.log("reports stored:", reportsStored)
   },
   methods: {
-    generateDates( firstDay ) {/* se sproži ko izberemo datum in doda datume itemom v days */
+    /* generateDates(firstDay) {
        for (let i=0;i<5;i++) {
          this.days[i].date = (this.addDays(firstDay, i));
        }
-    },
-    loadDays,
-    storeDays,
+    }, */
+    generateChosenDays(firstDayOfWeekDate,lastDayOfWeekDate) {
+      let result = eachDayOfInterval({
+        start: this.firstDayOfWeekDate,
+        end: this.lastDayOfWeekDate
+      })
+      
+      this.datesChosen = result
+      console.log("dates chosen = ", this.datesChosen)
+      this.getMultipleDaysReportsForDatesChosen(this.datesChosen, this.reportsStored)
+    }, 
+    //loadDays
+    loadAllReports,
+    //storeDays,
+    
+    storeReports,
+    getMultipleDaysReportsForDatesChosen,
 
     clearLocalStorage () {
       if (confirm('Ali res želiš izbrisati vse vnose?')) {
@@ -132,6 +158,7 @@ export default {
     }
   },
 };
+
 </script>
 
 <style scoped>

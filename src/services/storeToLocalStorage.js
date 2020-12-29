@@ -1,10 +1,10 @@
-let days = [
-  { id: 0, dayname: "PON", date: "", lokacijaDela: "dom", stUr: 2, opisDela: ""},
-  { id: 1, dayname: "TOR", date: "", lokacijaDela: "dom", stUr: 4, opisDela: ""},
-  { id: 2, dayname: "SRE", date: "", lokacijaDela: "dom", stUr: 5, opisDela: ""},
-  { id: 3, dayname: "ČET", date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
-  { id: 4, dayname: "PET", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-]
+let days = {
+  "date1": {date: "", lokacijaDela: "dom", stUr: 2, opisDela: ""},
+  "date2": {date: "", lokacijaDela: "dom", stUr: 4, opisDela: ""},
+  "date3": {date: "", lokacijaDela: "dom", stUr: 5, opisDela: ""},
+  "date4": {date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
+  "date5": {date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
+}
 
 function loadDays (){
   console.log("zagnal LoadDays");
