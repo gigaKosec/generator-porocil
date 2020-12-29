@@ -6,8 +6,6 @@ let days = [
   { id: 4, dayname: "PET", date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
 ]
 
-let Day = {date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
-
 function loadDays (){
   console.log("zagnal LoadDays");
   if (localStorage.getItem('days')) {
@@ -21,27 +19,8 @@ function loadDays (){
     }
   }
   return days
+  
 }
-
-function loadDay (){
-  console.log("zagnal LoadDay");
-  let day = new Day()
-  if (localStorage.getItem('dailyInputs')) { // preveri, če local storage sploh obstaja
-    if 
-    try {
-      days = JSON.parse(localStorage.getItem('days'));
-      console.log("zlovdal 'days' from local storage");
-      /* return days */
-    }
-    catch (e) {
-      console.log('ERROR:',e)
-    }
-  }
-  return day
-}
-
-
-
 
 function storeDays () {
     console.log("saving 'days' to local storage")
