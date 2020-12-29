@@ -80,11 +80,11 @@ function loadAllReportsFromLocalStorage() {
     return {}
   }
   else {
-    const temp =  JSON.parse(localStorage.getItem("reportsOfWork"));
-    reportsStored = {};
+    reportsStored =  JSON.parse(localStorage.getItem("reportsOfWork"));
+    /*reportsStored = {};
     for (const [key, value] of Object.entries(temp)) {
        reportsStored[parseJSON(key)] = value;
-    }
+    }*/
     console.log("v local storageu našel: ", reportsStored)
     console.log(typeof Object.keys(reportsStored)[0] )
     return reportsStored;
@@ -115,7 +115,7 @@ let reportsStored = {}
 console.log("STORAGEALTER: KONCNI Multiple days reports:", multipleDaysReports)
 //storeReports(multipleDaysReports)
 
-export {multipleDaysReports, reportsStored, datesChosen, loadAllReports, storeReports, getMultipleDaysReportsForDatesChosen}
+export {multipleDaysReports, reportsStored, datesChosen, loadAllReports, storeReports, getMultipleDaysReportsForDatesChosen, SingleDayReport}
 
 
 

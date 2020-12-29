@@ -1,5 +1,5 @@
 <template>
-  <div id = "daily-inputs">
+  <div id="daily-inputs">
     <b-container class="week" fluid>
       <b-form id="choose-report-type-form">
         <b-row>
@@ -8,69 +8,97 @@
           <!-- <b-select>
 
           </b-select> -->
-          
-          
-          <b-input-group prepend="teden" style="width: 20rem" title="Izberi katerikoli dan iz tedna">
-          <b-form-datepicker
-            id = "selected-date"
-            start-weekday="1" 
-            :date-disabled-fn="dateDisabled"
-            :date-format-options="{ year: 'numeric', month: 'short', day: '2-digit'}"
-            v-model="chosenDate"
-            value-as-date
-            size="sm"
-            style="width: 170px"
-            @input="generateChosenDays"
-          ></b-form-datepicker>
+
+          <b-input-group
+            prepend="teden"
+            style="width: 20rem"
+            title="Izberi katerikoli dan iz tedna"
+          >
+            <b-form-datepicker
+              id="selected-date"
+              start-weekday="1"
+              :date-disabled-fn="dateDisabled"
+              :date-format-options="{
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+              }"
+              v-model="chosenDate"
+              value-as-date
+              size="sm"
+              style="width: 170px"
+              @input="generateChosenDays"
+            ></b-form-datepicker>
           </b-input-group>
           <b-button>izberi</b-button>
         </b-row>
       </b-form>
-      
-
 
       <b-form id="daily-inputs-form">
         <!-- BUTTONS ROW -->
-        <b-row class = "buttons-row">
+        <b-row class="buttons-row">
           <!-- datum -->
-            
-          
-          <b-col><b-button variant="primary" @click="storeReports" size="lg">SHRANI</b-button></b-col>
+
+          <b-col
+            ><b-button variant="primary" @click="storeReports" size="lg"
+              >SHRANI</b-button
+            ></b-col
+          >
           <b-col>
-            <b-checkbox id="show-output" v-model="showOutput"> prikaži output</b-checkbox>
-            <b-button size="sm" variant="danger" @click="clearLocalStorage">ZBRIŠI LOCAL STORAGE</b-button>
+            <b-checkbox id="show-output" v-model="showOutput">
+              prikaži output</b-checkbox
+            >
+            <b-button size="sm" variant="danger" @click="clearLocalStorage"
+              >ZBRIŠI LOCAL STORAGE</b-button
+            >
           </b-col>
         </b-row>
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
-        <p>{{datesChosen}}</p>
-        <b-row class="day" v-for="day in multipleDaysReports" v-bind:key="day" > 
-          
+        <p>{{ datesChosen }}</p>
+        <b-row class="day" v-for="(day, index) in multipleDaysReports" v-bind:key="index">
           <!-- 1. STOLPEC: ime dneva, lokacija, št ur -->
           <b-col cols="2" style="min-width: 160px">
             <!-- <b-row>  --><!-- ime dneva v tednu -->
-              <!-- <h2 class="day-name">{{day.dayname}}</h2>
+            <!-- <h2 class="day-name">{{day.dayname}}</h2>
             </b-row>
-            <b-row> --> <!-- datum -->
-              <!-- <div class=date>{{day.date}}</div>
+            <b-row> -->
+            <!-- datum -->
+            <!-- <div class=date>{{day.date}}</div>
             </b-row> -->
-            <b-row class="daily-location"> <!-- lokacija -->
+            <b-row class="daily-location">
+              <!-- lokacija -->
               <b-form-radio-group v-model="day.lokacijaDela" inline="true">
-                  <b-form-radio value="dom">dom</b-form-radio>
-                  <b-form-radio value="služba">služba </b-form-radio>
+                <b-form-radio value="dom">dom</b-form-radio>
+                <b-form-radio value="služba">služba </b-form-radio>
               </b-form-radio-group>
             </b-row>
-            <b-row class="daily-hours"> <!-- št ur -->
+            <b-row class="daily-hours">
+              <!-- št ur -->
               <label>št. ur:</label>
-              <b-form-input type="number" v-model="day.stUr" style="width: 60px"></b-form-input>
+              <b-form-input
+                type="number"
+                v-model="day.stUr"
+                style="width: 60px"
+              ></b-form-input>
             </b-row>
-            
           </b-col>
           <!-- 2. STOLPEC: opis dela -->
-          <b-col class="daily-work-description"> <b-textarea rows="5" :value="day.opisDela" v-model="day.opisDela"></b-textarea> </b-col>
+          <b-col class="daily-work-description">
+            <b-textarea
+              rows="5"
+              :value="day.opisDela"
+              v-model="day.opisDela"
+            ></b-textarea>
+          </b-col>
           <!-- 3. STOLPEC: output -->
-          <b-col class="daily-output" cols="4" style="max-height:200px; overflow: hidden" v-if="showOutput">
-            <b-row>{{day}}</b-row>
+          <b-col
+            class="daily-output"
+            cols="4"
+            style="max-height: 200px; overflow: hidden"
+            v-if="showOutput"
+          >
+            <b-row>{{ day }}</b-row>
           </b-col>
         </b-row>
       </b-form>
@@ -80,8 +108,14 @@
 
 <script>
 //import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
-import {setDay, eachDayOfInterval} from 'date-fns';
-import {multipleDaysReports, reportsStored, datesChosen, loadAllReports, storeReports, getMultipleDaysReportsForDatesChosen} from '@/services/storageAlter.js'
+import { setDay, eachDayOfInterval } from "date-fns";
+import {
+  multipleDaysReports,
+  datesChosen,
+  loadAllReports,
+  storeReports,
+  SingleDayReport,
+} from "@/services/storageAlter.js";
 
 export default {
   data() {
@@ -92,28 +126,27 @@ export default {
       showOutput: false,
       datesChosen: [],
       reportsStored: {},
-      multipleDaysReports,
-      
+      multipleDaysReports: {},
     };
   },
   computed: {
     firstDayOfWeekDate: function () {
-      return setDay (this.chosenDate,1)
+      return setDay(this.chosenDate, 1);
     },
-    lastDayOfWeekDate: function() {
+    lastDayOfWeekDate: function () {
       /* console.log("last date of week =", this.addDays(this.firstDayOfWeekDate,5)) */
-      return this.addDays(this.firstDayOfWeekDate,4)
+      return this.addDays(this.firstDayOfWeekDate, 4);
     },
-    
+
     /* multipleDaysReportsArray: function(){
       return Object.values(multipleDaysReports())
     }, */
   },
 
-  mounted (){
-    this.loadAllReports();
+  mounted() {
+    this.reportsStored = loadAllReports();
     this.generateChosenDays();
-    
+
     //console.log("reports stored:", reportsStored)
   },
   methods: {
@@ -122,48 +155,61 @@ export default {
          this.days[i].date = (this.addDays(firstDay, i));
        }
     }, */
-    generateChosenDays(firstDayOfWeekDate,lastDayOfWeekDate) {
+    generateChosenDays(firstDayOfWeekDate, lastDayOfWeekDate) {
       let result = eachDayOfInterval({
         start: this.firstDayOfWeekDate,
-        end: this.lastDayOfWeekDate
-      })
-      
-      this.datesChosen = result
-      console.log("dates chosen = ", this.datesChosen)
-      this.getMultipleDaysReportsForDatesChosen(this.datesChosen, this.reportsStored)
-    }, 
-    //loadDays
-    loadAllReports,
-    //storeDays,
-    
-    storeReports,
-    getMultipleDaysReportsForDatesChosen,
+        end: this.lastDayOfWeekDate,
+      });
 
-    clearLocalStorage () {
-      if (confirm('Ali res želiš izbrisati vse vnose?')) {
-      localStorage.clear()
-      location.reload()
+      this.datesChosen = result;
+      console.log("dates chosen = ", this.datesChosen);
+      this.getMultipleDaysReportsForDatesChosen(
+        this.datesChosen,
+        this.reportsStored
+      );
+    },
+    //loadDays
+    //loadAllReports,
+    //storeDays,
+
+    storeReports,
+    getMultipleDaysReportsForDatesChosen() {
+      for (let date of this.datesChosen) {
+        if (date in this.reportsStored) {
+          console.log("datum najden v reportsStore");
+          this.multipleDaysReports[date] = this.reportsStored[date];
+        } else {
+          console.log("NISEM našel datuma", date, "v", this.reportsStored);
+          let dailyInput = new SingleDayReport(date);
+          this.multipleDaysReports[date] = dailyInput;
+        }
+      }
+    },
+
+    clearLocalStorage() {
+      if (confirm("Ali res želiš izbrisati vse vnose?")) {
+        localStorage.clear();
+        location.reload();
       }
     },
     dateDisabled(ymd, date) {
-        // Disable weekends (Sunday = `0`, Saturday = `6`)
-        const weekday = date.getDay()
-        // Return `true` if the date should be disabled
-        return weekday === 0 || weekday === 6
+      // Disable weekends (Sunday = `0`, Saturday = `6`)
+      const weekday = date.getDay();
+      // Return `true` if the date should be disabled
+      return weekday === 0 || weekday === 6;
     },
     addDays(date, days) {
       let result = new Date(date);
       result.setDate(result.getDate() + days);
       return result;
-    }
+    },
   },
 };
-
 </script>
 
 <style scoped>
-  #daily-inputs {
-    margin-left: 20px;
-  }
+#daily-inputs {
+  margin-left: 20px;
+}
 </style>
 
