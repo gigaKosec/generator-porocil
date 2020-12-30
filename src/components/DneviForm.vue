@@ -30,7 +30,7 @@
                   value-as-date
                   size="sm"
                   style="width: 170px"
-                  @input="generateChosenDays"
+                  @input="renderNewReport"
                 ></b-form-datepicker>
               </b-input-group>
               <!-- <b-button>pošlji</b-button> -->
@@ -152,11 +152,18 @@ export default {
     this.reportsStored = this.loadAllReports();
     this.chosenDate = new Date()
     this.chosenDate.setHours(0,0,0,0)
-    this.generateChosenDays()
+    this.renderNewReport()
+    //this.generateChosenDays()
     
   },
 
   methods: {
+    renderNewReport (){
+      this.storeReports()
+      this.generateChosenDays()
+      this.getMultipleDaysReportsForDatesChosen()
+    },
+    
     generateChosenDays () {
       console.log("THE date chosen =", this.chosenDate)
       let result = eachDayOfInterval({
@@ -167,7 +174,6 @@ export default {
       this.datesChosen = result;
       console.log("dates chosen = ", this.datesChosen);
       console.log("Multiple days reports pred generiranjem:", this.multipleDaysReports)
-      this.getMultipleDaysReportsForDatesChosen()
     },
     //loadDays
     //loadAllReports,
