@@ -44,3 +44,9 @@ TODO MINOR
 - bližnjice na tipkovnici
   - ctrl-v prilepi iz pravkar izpolnjenega textarea v naslednjega
   - tabi preskakujejo le med textarea??
+
+TODO DATES
+- datumi, ki keyi, spremenit v ISO
+- vsem datumom odrezati ure?  (vse v ISO - toda potem ne moreš delati z njimi)
+  - T: ker izbrani s pickerjem, so že po defaultu 00:00:00  (le gmt = +1:00)
+- chosen date - če izbran po defaultu, odreži ure!!!

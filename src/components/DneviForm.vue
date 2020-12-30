@@ -55,21 +55,22 @@
         </b-row>
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
-        <p>{{ datesChosen }}</p>
+        <p> IZBRANI DATUMI: {{ datesChosen.map(x => ISOdate(x)) }}</p>
         <b-row
           class="day"
           v-for="(day, index) in multipleDaysReports"
           v-bind:key="index"
         >
-          <!-- 1. STOLPEC: ime dneva, lokacija, št ur -->
+          <!-- 1. STOLPEC: PODATKI O DNEVU-->
           <b-col cols="2" style="min-width: 160px">
-            <!-- <b-row>  --><!-- ime dneva v tednu -->
-            <!-- <h2 class="day-name">{{day.dayname}}</h2>
+            <!-- ime dneva v tednu -->
+            <b-row>  
+              <h2 class="day-name">{{dayOfWeek(day.datum)}}</h2>
             </b-row>
-            <b-row> -->
             <!-- datum -->
-            <!-- <div class=date>{{day.date}}</div>
-            </b-row> -->
+            <b-row>
+              <div class=date>{{ ISOdate(new Date(day.datum)) }}</div>
+            </b-row>
             <b-row class="daily-location">
               <!-- lokacija -->
               <b-form-radio-group v-model="day.lokacijaDela" inline="true">
@@ -123,9 +124,7 @@ import * as Fdate from "date-fns";
 export default {
   data() {
     return {
-      chosenDate: null,  //new Date(),
-      //days,
-      //multipleDaysReports,
+      chosenDate: null,  //new Date(), PAZI - moraš še odrezat ure itd.
       showOutput: false,
       datesChosen: [],
       reportsStored: {},
@@ -140,18 +139,19 @@ export default {
       /* console.log("last date of week =", this.addDays(this.firstDayOfWeekDate,5)) */
       return this.addDays(this.firstDayOfWeekDate, 4);
     },
-
-    /* multipleDaysReportsArray: function(){
-      return Object.values(multipleDaysReports())
-    }, */
-  },
+  }, 
 
   mounted() {
     this.reportsStored = this.loadAllReports();
+    this.chosenDate = new Date()
+    this.chosenDate.setHours(0,0,0,0)
+    this.generateChosenDays()
+    
   },
 
   methods: {
     generateChosenDays () {
+      console.log("THE date chosen =", this.chosenDate)
       let result = eachDayOfInterval({
         start: this.firstDayOfWeekDate,
         end: this.lastDayOfWeekDate,
@@ -179,17 +179,21 @@ export default {
       }
       this.multipleDaysReports = {}
       for (let date of this.datesChosen) {
-        console.log("type od prvega datuma =", typeof date)
+        const dateAsKey=this.ISOdate(date)
+        console.log("type od prvega datuma =", typeof dateAsKey)
         console.log("type od drugega datuma = ", typeof (Object.keys(this.reportsStored)[0]) )
+        console.log("new key for date =",dateAsKey)
         
-        if (date in Object.keys(this.reportsStored)) {
+        if ((Object.keys(this.reportsStored)).includes(dateAsKey)) {
           console.log("datum najden v reportsStore");
-          this.multipleDaysReports[date] = this.reportsStored[date];
+          this.multipleDaysReports[dateAsKey] = this.reportsStored[dateAsKey];
         } else {
-          console.log("NISEM našel datuma", date, "v", Object.keys(this.reportsStored));
+          console.log("NISEM našel datuma", dateAsKey, "v", Object.keys(this.reportsStored));
           let dailyInput = new SingleDayReport(date);
-          //console.log("daily Input =", dailyInput)
-          this.multipleDaysReports[date] = dailyInput;
+          
+          console.log("generiram nov defaultni dnevni vnos")
+          console.log("daily Input =", dailyInput)
+          this.multipleDaysReports[dateAsKey] = dailyInput;
           
         }
       }
@@ -225,30 +229,33 @@ export default {
         return {}
       }
       else {
-        let localReportsStored = {}
+        //let localReportsStored = {}
         let tempReportsStored =  JSON.parse(localStorage.getItem("reportsOfWork"));
-        let prviKey = Object.keys(tempReportsStored)[0]
-        console.log("v local storageu našel: ", tempReportsStored)
-        console.log("keys = ", Object.keys(tempReportsStored))
-        console.log("prvi key =", prviKey)
-        console.log("type of key = ", typeof prviKey)
-        console.log("pretvorjen key =", Fdate.parseISO(prviKey))
+        //let prviKey = Object.keys(tempReportsStored)[0]
+        //console.log("v local storageu našel: ", tempReportsStored)
+        //console.log("keys = ", Object.keys(tempReportsStored))
+        //console.log("prvi key =", prviKey)
+        //console.log("type of key = ", typeof prviKey)
+        //console.log("pretvorjen key =", Fdate.parseISO(prviKey))
         /*reportsStored = {};
         for (const [key, value] of Object.entries(temp)) {
           reportsStored[parseJSON(key)] = value;
         }*/
-        
-        for (let [key,value] of Object.entries(tempReportsStored)) {
-          localReportsStored[parseJSON(key)] = value
-        }
+        //
+        //for (let [key,value] of Object.entries(tempReportsStored)) {
+        //  localReportsStored[parseJSON(key)] = value
+        //}
 
-        console.log("pretvoril local storage v: ", localReportsStored)
-        console.log("Type od ključev sedaj: ", typeof Object.keys(localReportsStored)[0] )
-        return localReportsStored;
+        //console.log("pretvoril local storage v: ", localReportsStored)
+        //console.log("Type od ključev sedaj: ", typeof Object.keys(localReportsStored)[0] ) */
+        return tempReportsStored;
       }
     },
 
     // DATE RELATED METHODS
+    ISOdate(date){
+      return Fdate.formatISO(date,{representation: "date"})
+    },
     dateDisabled(ymd, date) {
       // Disable weekends (Sunday = `0`, Saturday = `6`)
       const weekday = date.getDay();
@@ -260,8 +267,11 @@ export default {
       result.setDate(result.getDate() + days);
       return result;
     },
-  },
-};
+    dayOfWeek (dateString) {
+      return Fdate.format(new Date(dateString),'eee')
+    },
+  }
+}
 </script>
 
 <style scoped>
