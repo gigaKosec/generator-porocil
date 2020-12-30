@@ -10,6 +10,7 @@
                   id="type-of-report"
                   v-model="typeOfReport"
                   buttons
+                  @change="renderNewReport"
                 >
                   <b-form-radio value="weekly" button-variant="outline-primary">
                     tedensko
@@ -112,6 +113,7 @@
                 v-model="day.lokacijaDela"
                 inline="true"
                 buttons
+                :hidden="isWeekendDay(new Date(day.datum))"
               >
                 <b-form-radio value="doma" button-variant="outline-secondary"
                   >od doma</b-form-radio
@@ -123,7 +125,7 @@
             </b-row>
             <b-row class="daily-hours">
               <!-- št ur -->
-              <b-input-group prepend="št. ur">
+              <b-input-group prepend="št. ur" :hidden="isWeekendDay(new Date(day.datum))">
                 <b-form-input type="number" v-model="day.stUr"></b-form-input>
               </b-input-group>
             </b-row>
@@ -135,9 +137,13 @@
               max-rows="8"
               :value="day.opisDela"
               v-model="day.opisDela"
+              :disabled="isWeekendDay(new Date(day.datum))"
+              
+              
             ></b-form-textarea>
           </b-col>
-          <!-- 3. STOLPEC: output -->
+
+          <!-- 3. STOLPEC: (optionalen) output -->
           <b-col
             class="daily-output"
             cols="4"
@@ -170,11 +176,26 @@ export default {
   },
   computed: {
     firstOfSelectedDays: function () {
-      return setDay(this.chosenDate, 1);
+      if (this.typeOfReport==="weekly"){
+        return setDay(this.chosenDate, 1);
+      }
+      else if (this.typeOfReport==="monthly") {
+        return Fdate.startOfMonth(this.chosenDate);
+      }
+      else {
+        return "NAPAKA"
+      }
     },
     lastOfSelectedDays: function () {
-      /* console.log("last date of week =", this.addDays(this.firstOfSelectedDays,5)) */
-      return setDay(this.chosenDate, 5);
+      if (this.typeOfReport==="weekly"){
+        return setDay(this.chosenDate, 5);
+      }
+      else if (this.typeOfReport==="monthly") {
+        return Fdate.lastDayOfMonth(this.chosenDate);
+      
+      } else {
+        return "NAPAKA"
+      }
     },
   },
 
@@ -309,6 +330,14 @@ export default {
       result.setDate(result.getDate() + days);
       return result;
     },
+    isWeekendDay(date){
+      if (Fdate.isWeekend(date)){
+        return true
+      }
+      else {
+        return false
+      }
+    }
     /* dayOfWeek(dateString) {
       return Fdate.format(new Date(dateString), "EEE", { locale: sl });
     }, */
@@ -319,6 +348,10 @@ export default {
 <style scoped>
 #daily-inputs {
   margin-left: 20px;
+}
+
+.grey {
+  background: lightgrey;
 }
 </style>
 
