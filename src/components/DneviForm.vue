@@ -88,16 +88,26 @@
         >
           <!-- 1. STOLPEC: PODATKI O DNEVU-->
           <b-col cols="2" style="min-width: 170px">
-            <!-- ime dneva v tednu -->
+            
             <b-row>
-              <h2 class="day-name">{{ dayOfWeek(day.datum) }}</h2>
+              <h2 class="day-name"></h2>
+              <h3>
+                <!-- ime dneva v tednu -->
+                {{new Date(day.datum).toLocaleDateString("sl", {
+                    weekday: "short",
+                  }).slice(0,3).toUpperCase()
+                }}
+                <!-- datum -->
+                {{
+                  new Date(day.datum).toLocaleDateString("sl", {
+                    day: "2-digit",
+                    month: "short",
+                  })
+                }}
+              </h3>
             </b-row>
-            <!-- datum -->
-            <b-row>
-              <div class="date">{{new Date(day.datum).toLocaleDateString("en-UK",{day:"2-digit", month:"short"})}}</div>
-            </b-row>
+            <!-- lokacija -->
             <b-row class="daily-location">
-              <!-- lokacija -->
               <b-form-radio-group
                 v-model="day.lokacijaDela"
                 inline="true"
@@ -114,20 +124,18 @@
             <b-row class="daily-hours">
               <!-- št ur -->
               <b-input-group prepend="št. ur">
-                <b-form-input
-                  type="number"
-                  v-model="day.stUr"
-                ></b-form-input>
+                <b-form-input type="number" v-model="day.stUr"></b-form-input>
               </b-input-group>
             </b-row>
           </b-col>
           <!-- 2. STOLPEC: opis dela -->
           <b-col class="daily-work-description">
-            <b-textarea
+            <b-form-textarea
               rows="4"
+              max-rows="8"
               :value="day.opisDela"
               v-model="day.opisDela"
-            ></b-textarea>
+            ></b-form-textarea>
           </b-col>
           <!-- 3. STOLPEC: output -->
           <b-col
@@ -145,10 +153,9 @@
 </template>
 
 <script>
-import { setDay, eachDayOfInterval, parseJSON, parseISO } from "date-fns";
+import { setDay, eachDayOfInterval, parseISO } from "date-fns";
 import * as Fdate from "date-fns";
-import { sl } from 'date-fns/locale';
-
+import { sl } from "date-fns/locale";
 
 export default {
   data() {
@@ -283,23 +290,6 @@ export default {
         let tempReportsStored = JSON.parse(
           localStorage.getItem("reportsOfWork")
         );
-        //let prviKey = Object.keys(tempReportsStored)[0]
-        //console.log("v local storageu našel: ", tempReportsStored)
-        //console.log("keys = ", Object.keys(tempReportsStored))
-        //console.log("prvi key =", prviKey)
-        //console.log("type of key = ", typeof prviKey)
-        //console.log("pretvorjen key =", Fdate.parseISO(prviKey))
-        /*reportsStored = {};
-        for (const [key, value] of Object.entries(temp)) {
-          reportsStored[parseJSON(key)] = value;
-        }*/
-        //
-        //for (let [key,value] of Object.entries(tempReportsStored)) {
-        //  localReportsStored[parseJSON(key)] = value
-        //}
-
-        //console.log("pretvoril local storage v: ", localReportsStored)
-        //console.log("Type od ključev sedaj: ", typeof Object.keys(localReportsStored)[0] ) */
         return tempReportsStored;
       }
     },
@@ -319,9 +309,9 @@ export default {
       result.setDate(result.getDate() + days);
       return result;
     },
-    dayOfWeek(dateString) {
-      return Fdate.format(new Date(dateString), "EEEE", {locale: sl});
-    },
+    /* dayOfWeek(dateString) {
+      return Fdate.format(new Date(dateString), "EEE", { locale: sl });
+    }, */
   },
 };
 </script>
