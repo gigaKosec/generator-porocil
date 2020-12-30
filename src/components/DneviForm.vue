@@ -3,6 +3,7 @@
     <b-container class="week" fluid>
       <b-form id="choose-report-type-form">
         <b-row>
+          
           <!-- <b-input-group prepend="izberi mesec">
             <b-form-input type="month"></b-form-input> -->
           <!-- <b-select>
@@ -73,9 +74,9 @@
             </b-row>
             <b-row class="daily-location">
               <!-- lokacija -->
-              <b-form-radio-group v-model="day.lokacijaDela" inline="true">
-                <b-form-radio value="dom">dom</b-form-radio>
-                <b-form-radio value="služba">služba </b-form-radio>
+              <b-form-radio-group v-model="day.lokacijaDela" inline="true" buttons>
+                <b-form-radio value="doma" button-variant="primary">doma</b-form-radio>
+                <b-form-radio value="služba" button-variant="primary">služba </b-form-radio>
               </b-form-radio-group>
             </b-row>
             <b-row class="daily-hours">
@@ -170,7 +171,7 @@ export default {
 
     getMultipleDaysReportsForDatesChosen() {
       class SingleDayReport {
-        constructor(datum = null, lokacijaDela = "dom", stUr = 8, opisDela = "") {
+        constructor(datum = null, lokacijaDela = "doma", stUr = 8, opisDela = "") {
           this.datum = datum;
           this.lokacijaDela = lokacijaDela;
           this.stUr = stUr;
