@@ -3,35 +3,39 @@
     <b-container class="week" fluid>
       <b-form id="choose-report-type-form">
         <b-row>
-          
-          <!-- <b-input-group prepend="izberi mesec">
-            <b-form-input type="month"></b-form-input> -->
-          <!-- <b-select>
+          <b-col>
+            <b-row>
+              <b-form-radio-group id="type-of-report" v-model="typeOfReport" buttons>
+                <b-form-radio value="weekly" button-variant="outline-primary"> teden </b-form-radio>
+                <b-form-radio value="monthly" button-variant="outline-primary"> mesec </b-form-radio>
+              </b-form-radio-group>
+            </b-row>
 
-          </b-select> -->
-
-          <b-input-group
-            prepend="teden"
-            style="width: 20rem"
-            title="Izberi katerikoli dan iz tedna"
-          >
-            <b-form-datepicker
-              id="selected-date"
-              start-weekday="1"
-              :date-disabled-fn="dateDisabled"
-              :date-format-options="{
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit',
-              }"
-              v-model="chosenDate"
-              value-as-date
-              size="sm"
-              style="width: 170px"
-              @input="generateChosenDays"
-            ></b-form-datepicker>
-          </b-input-group>
-          <b-button>izberi</b-button>
+            <b-row>
+              <b-input-group
+                prepend="ki vsebuje"
+                style="width: 20rem"
+                title="Izberi katerikoli dan iz tedna"
+              >
+                <b-form-datepicker
+                  id="selected-date"
+                  start-weekday="1"
+                  :date-disabled-fn="dateDisabled"
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                  }"
+                  v-model="chosenDate"
+                  value-as-date
+                  size="sm"
+                  style="width: 170px"
+                  @input="generateChosenDays"
+                ></b-form-datepicker>
+              </b-input-group>
+              <!-- <b-button>pošlji</b-button> -->
+            </b-row>
+          </b-col>
         </b-row>
       </b-form>
 
@@ -40,23 +44,24 @@
         <b-row class="buttons-row">
           <!-- datum -->
 
-          <b-col
+          <b-col offset="2"
             ><b-button variant="primary" @click="storeReports()" size="lg"
               >SHRANI</b-button
             ></b-col
           >
           <b-col>
-            <b-checkbox id="show-output" v-model="showOutput">
+            <b-row><b-checkbox id="show-output" v-model="showOutput">
               prikaži output</b-checkbox
             >
-            <b-button size="sm" variant="danger" @click="clearLocalStorage"
+            <b-button size="sm" variant="danger" v-if="showOutput" @click="clearLocalStorage"
               >ZBRIŠI LOCAL STORAGE</b-button
             >
+            </b-row>
           </b-col>
         </b-row>
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
-        <p> IZBRANI DATUMI: {{ datesChosen.map(x => ISOdate(x)) }}</p>
+        <!-- <p> IZBRANI DATUMI: {{ datesChosen.map(x => ISOdate(x)) }}</p> -->
         <b-row
           class="day"
           v-for="(day, index) in multipleDaysReports"
@@ -75,8 +80,8 @@
             <b-row class="daily-location">
               <!-- lokacija -->
               <b-form-radio-group v-model="day.lokacijaDela" inline="true" buttons>
-                <b-form-radio value="doma" button-variant="primary">doma</b-form-radio>
-                <b-form-radio value="služba" button-variant="primary">služba </b-form-radio>
+                <b-form-radio value="doma" button-variant="outline-secondary" >doma</b-form-radio>
+                <b-form-radio value="služba" button-variant="outline-secondary">služba </b-form-radio>
               </b-form-radio-group>
             </b-row>
             <b-row class="daily-hours">
@@ -125,6 +130,7 @@ import * as Fdate from "date-fns";
 export default {
   data() {
     return {
+      typeOfReport: "weekly",
       chosenDate: null,  //new Date(), PAZI - moraš še odrezat ure itd.
       showOutput: false,
       datesChosen: [],
