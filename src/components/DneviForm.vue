@@ -40,7 +40,7 @@
           <!-- datum -->
 
           <b-col
-            ><b-button variant="primary" @click="storeReports" size="lg"
+            ><b-button variant="primary" @click="storeReports()" size="lg"
               >SHRANI</b-button
             ></b-col
           >
@@ -56,7 +56,11 @@
 
         <!-- VRSTICA ZA DNEVNI VNOS -->
         <p>{{ datesChosen }}</p>
-        <b-row class="day" v-for="(day, index) in multipleDaysReports" v-bind:key="index">
+        <b-row
+          class="day"
+          v-for="(day, index) in multipleDaysReports"
+          v-bind:key="index"
+        >
           <!-- 1. STOLPEC: ime dneva, lokacija, št ur -->
           <b-col cols="2" style="min-width: 160px">
             <!-- <b-row>  --><!-- ime dneva v tednu -->
@@ -107,20 +111,19 @@
 </template>
 
 <script>
+import { setDay, eachDayOfInterval, parseJSON, parseISO } from "date-fns";
+import * as Fdate from "date-fns";
 //import {loadDays,storeDays, days} from '@/services/storeToLocalStorage';
-import { setDay, eachDayOfInterval } from "date-fns";
-import {
-  multipleDaysReports,
-  datesChosen,
+/* import {
   loadAllReports,
   storeReports,
-  SingleDayReport,
-} from "@/services/storageAlter.js";
+  //SingleDayReport,
+} from "@/services/storageAlter.js"; */
 
 export default {
   data() {
     return {
-      chosenDate: new Date(),
+      chosenDate: null,  //new Date(),
       //days,
       //multipleDaysReports,
       showOutput: false,
@@ -144,18 +147,11 @@ export default {
   },
 
   mounted() {
-    this.reportsStored = loadAllReports();
-    this.generateChosenDays();
-
-    //console.log("reports stored:", reportsStored)
+    this.reportsStored = this.loadAllReports();
   },
+
   methods: {
-    /* generateDates(firstDay) {
-       for (let i=0;i<5;i++) {
-         this.days[i].date = (this.addDays(firstDay, i));
-       }
-    }, */
-    generateChosenDays(firstDayOfWeekDate, lastDayOfWeekDate) {
+    generateChosenDays () {
       let result = eachDayOfInterval({
         start: this.firstDayOfWeekDate,
         end: this.lastDayOfWeekDate,
@@ -163,28 +159,45 @@ export default {
 
       this.datesChosen = result;
       console.log("dates chosen = ", this.datesChosen);
-      this.getMultipleDaysReportsForDatesChosen(
-        this.datesChosen,
-        this.reportsStored
-      );
+      console.log("Multiple days reports pred generiranjem:", this.multipleDaysReports)
+      this.getMultipleDaysReportsForDatesChosen()
     },
     //loadDays
     //loadAllReports,
     //storeDays,
 
-    storeReports,
+    //storeReports(multipleDaysReports),
+
     getMultipleDaysReportsForDatesChosen() {
+      class SingleDayReport {
+        constructor(datum = null, lokacijaDela = "dom", stUr = 8, opisDela = "") {
+          this.datum = datum;
+          this.lokacijaDela = lokacijaDela;
+          this.stUr = stUr;
+          this.opisDela = opisDela;
+        }
+      }
+      this.multipleDaysReports = {}
       for (let date of this.datesChosen) {
-        if (date in this.reportsStored) {
+        console.log("type od prvega datuma =", typeof date)
+        console.log("type od drugega datuma = ", typeof (Object.keys(this.reportsStored)[0]) )
+        
+        if (date in Object.keys(this.reportsStored)) {
           console.log("datum najden v reportsStore");
           this.multipleDaysReports[date] = this.reportsStored[date];
         } else {
-          console.log("NISEM našel datuma", date, "v", this.reportsStored);
+          console.log("NISEM našel datuma", date, "v", Object.keys(this.reportsStored));
           let dailyInput = new SingleDayReport(date);
+          //console.log("daily Input =", dailyInput)
           this.multipleDaysReports[date] = dailyInput;
+          
         }
       }
+      console.log("MultipleDaysReports po generiranju = ", this.multipleDaysReports)
     },
+
+    // STORING METHODS
+    
 
     clearLocalStorage() {
       if (confirm("Ali res želiš izbrisati vse vnose?")) {
@@ -192,6 +205,50 @@ export default {
         location.reload();
       }
     },
+    storeReports() {
+      console.log("SHRANJUJEM V LOCAL STORE")
+      
+      for (let [key,value] of Object.entries(this.multipleDaysReports)) {
+        console.log("  key =", key)
+        console.log("value =",value)
+        this.reportsStored[key] = value
+        console.log("reports stored =",this.reportsStored)
+      }
+      console.log("KONČNI reports stored",this.reportsStored)
+      localStorage.setItem("reportsOfWork", JSON.stringify(this.reportsStored))
+      
+    },
+
+    loadAllReports() {
+      if (localStorage.getItem("reportsOfWork") === null){
+        console.log("ni našel ničesar v local storage")
+        return {}
+      }
+      else {
+        let localReportsStored = {}
+        let tempReportsStored =  JSON.parse(localStorage.getItem("reportsOfWork"));
+        let prviKey = Object.keys(tempReportsStored)[0]
+        console.log("v local storageu našel: ", tempReportsStored)
+        console.log("keys = ", Object.keys(tempReportsStored))
+        console.log("prvi key =", prviKey)
+        console.log("type of key = ", typeof prviKey)
+        console.log("pretvorjen key =", Fdate.parseISO(prviKey))
+        /*reportsStored = {};
+        for (const [key, value] of Object.entries(temp)) {
+          reportsStored[parseJSON(key)] = value;
+        }*/
+        
+        for (let [key,value] of Object.entries(tempReportsStored)) {
+          localReportsStored[parseJSON(key)] = value
+        }
+
+        console.log("pretvoril local storage v: ", localReportsStored)
+        console.log("Type od ključev sedaj: ", typeof Object.keys(localReportsStored)[0] )
+        return localReportsStored;
+      }
+    },
+
+    // DATE RELATED METHODS
     dateDisabled(ymd, date) {
       // Disable weekends (Sunday = `0`, Saturday = `6`)
       const weekday = date.getDay();

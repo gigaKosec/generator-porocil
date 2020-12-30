@@ -28,17 +28,17 @@ let reportsStored = {
 
 //let reportsStored = []
 
-let datesChosen = [
-  /* new Date(2020, 11, 21),
+/* let datesChosen = [
+  new Date(2020, 11, 21),
   new Date(2020, 11, 22),
   new Date(2020, 11, 23),
   new Date(2020, 11, 24),
-  new Date(2020, 11, 25), */
-]
+  new Date(2020, 11, 25),
+] */
 
 
 
-function getMultipleDaysReportsForDatesChosen(datesChosen, reportsStored) {
+/* function getMultipleDaysReportsForDatesChosen(datesChosen, reportsStored) {
   //let multipleDaysReports = {}
   console.log("reportsStored, ki jih pregledujemo:", reportsStored)
   for (let date of datesChosen) {
@@ -54,9 +54,9 @@ function getMultipleDaysReportsForDatesChosen(datesChosen, reportsStored) {
         reportsStored[date].stUr,
         reportsStored[date].opisDela)
       multipleDaysReports.push({[date]:dailyReport}) */
-    }
+    /*}
     else {
-      //let animals = {[new Date(2020,10,1)]:"bear", "second":"cat"}
+
       console.log("NISEM našel datuma", date, "v", reportsStored)
       let dailyInput = new SingleDayReport(date)
       multipleDaysReports[date]=dailyInput
@@ -64,11 +64,13 @@ function getMultipleDaysReportsForDatesChosen(datesChosen, reportsStored) {
   }
   //return multipleDaysReports
 }
+ */
 
-
-function storeReportsToLocalStorage () {
+ 
+function storeReportsToLocalStorage() {
   localStorage.setItem("reportsOfWork", JSON.stringify(multipleDaysReports))
 }
+
 function storeReports () {
   console.log("storing reports to local storage")
   storeReportsToLocalStorage()
@@ -80,7 +82,7 @@ function loadAllReportsFromLocalStorage() {
     return {}
   }
   else {
-    reportsStored =  JSON.parse(localStorage.getItem("reportsOfWork"));
+    let reportsStored =  JSON.parse(localStorage.getItem("reportsOfWork"));
     /*reportsStored = {};
     for (const [key, value] of Object.entries(temp)) {
        reportsStored[parseJSON(key)] = value;
@@ -97,25 +99,25 @@ function loadAllReports () {
 
 
 // ZAGON
-let multipleDaysReports = {
-/*   "date1": {date: "", lokacijaDela: "dom", stUr: 2, opisDela: ""},
+/* let multipleDaysReports = {
+  "date1": {date: "", lokacijaDela: "dom", stUr: 2, opisDela: ""},
   "date2": {date: "", lokacijaDela: "dom", stUr: 4, opisDela: ""},
   "date3": {date: "", lokacijaDela: "dom", stUr: 5, opisDela: ""},
   "date4": {date: "", lokacijaDela: "dom", stUr: 6, opisDela: ""},
-  "date5": {date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""}, */
-}
+  "date5": {date: "", lokacijaDela: "dom", stUr: 8, opisDela: ""},
+} */
 
 //let multipleDaysReports = {}
-let reportsStored = {}
+//let reportsStored = {}
 
 
 //reportsStored = loadAllReports()
 //console.log("reportsStored po loadAllReports", reportsStored)
 //multipleDaysReports = getMultipleDaysReportsForDatesChosen(datesChosen, reportsStored)
-console.log("STORAGEALTER: KONCNI Multiple days reports:", multipleDaysReports)
+//console.log("STORAGEALTER: KONCNI Multiple days reports:", multipleDaysReports)
 //storeReports(multipleDaysReports)
 
-export {multipleDaysReports, reportsStored, datesChosen, loadAllReports, storeReports, getMultipleDaysReportsForDatesChosen, SingleDayReport}
+export {loadAllReports, storeReports}
 
 
 
