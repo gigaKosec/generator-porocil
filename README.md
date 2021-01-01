@@ -50,3 +50,5 @@ TODO DATES
 - vsem datumom odrezati ure?  (vse v ISO - toda potem ne moreš delati z njimi)
   - T: ker izbrani s pickerjem, so že po defaultu 00:00:00  (le gmt = +1:00)
 - chosen date - če izbran po defaultu, odreži ure!!!
+
+

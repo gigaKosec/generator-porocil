@@ -1,11 +1,10 @@
 <template>
   <div id="daily-inputs">
-    <b-container class="week" fluid>
+    <b-container class="report-input-fields" fluid>
       <b-form id="choose-report-type-form">
-        <b-row>
-          <b-col>
+        
             <b-row>
-              <b-input-group prepend="Poročilo">
+              <b-input-group prepend="Vrsta obdobja">
                 <b-form-radio-group
                   id="type-of-report"
                   v-model="typeOfReport"
@@ -27,8 +26,9 @@
 
             <b-row>
               <b-input-group
-                prepend="Izberi"
-                style="width: 20rem"
+                style="width: 300px"
+                prepend="Izberi datum"
+                
                 title="Izberi katerikoli dan iz tedna/meseca"
               >
                 <b-form-datepicker
@@ -38,20 +38,26 @@
                   :date-format-options="{
                     year: 'numeric',
                     month: 'short',
-                    day: '2-digit',
+                    day: undefined,
                   }"
                   v-model="chosenDate"
                   value-as-date
-                  size="sm"
-                  style="width: 170px"
+                  size="bg"
                   @input="renderNewReport"
                 ></b-form-datepicker>
-                <!-- <div>OD: {{formatISO(firstOfSelectedDays,{<<})}} DO: {{ISOdate(lastOfSelectedDays)}} </div> -->
+
+                <h2 id="period-to-show">
+                  {{firstOfSelectedDays.toLocaleDateString("sl", {
+                      day: "2-digit",
+                      month: "short",
+                    })}} - {{lastOfSelectedDays.toLocaleDateString("sl", {
+                      day: "2-digit",
+                      month: "short",
+                    })}} 
+                </h2>
               </b-input-group>
               <!-- <b-button>pošlji</b-button> -->
             </b-row>
-          </b-col>
-        </b-row>
       </b-form>
 
       <b-form id="daily-inputs-form">
@@ -59,10 +65,10 @@
         <b-row class="buttons-row">
           <!-- datum -->
 
-          <b-col offset="2"
-            ><b-button variant="primary" @click="storeReports()" size="lg"
+          <b-col offset="6"
+            ><b-button variant="primary" @click="storeReports()" v-if="showOutput" size="lg"
               >SHRANI</b-button
-            ></b-col
+          ></b-col
           >
           <b-col>
             <b-row
@@ -80,8 +86,8 @@
           </b-col>
         </b-row>
 
+
         <!-- VRSTICA ZA DNEVNI VNOS -->
-        <!-- <p> IZBRANI DATUMI: {{ datesChosen.map(x => ISOdate(x)) }}</p> -->
         <b-row
           class="day"
           v-for="(day, index) in multipleDaysReports"
@@ -136,7 +142,7 @@
               rows="4"
               max-rows="8"
               :value="day.opisDela"
-              v-model="day.opisDela"
+              v-model.lazy="day.opisDela"
               :disabled="isWeekendDay(new Date(day.datum))"
               
               
@@ -353,5 +359,26 @@ export default {
 .grey {
   background: lightgrey;
 }
+
+.day {
+  padding: 10px;
+  /* margin-bottom: 1rem; */
+  
+  border: 2px solid lightgray;
+  border-radius: 10px;
+}
+
+#selected-date{
+  width: 20px;
+}
+.datetime-picker input {
+  width: 30px;
+  height: 38px;
+}
+
+#period-to-show {
+  margin-left: 20px;
+}
+
 </style>
 
